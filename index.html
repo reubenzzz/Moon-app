@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Moon Phase Tracker</title>
+  <style>
+    body { text-align: center; font-family: Arial; background: black; color: white; }
+    button { margin: 15px; padding: 10px 20px; border: none; border-radius: 8px; background: #444; color: white; font-size: 16px; }
+    .moon-phase { margin: 10px 0; }
+  </style>
+</head>
+<body>
+  <h1>🌙 Moon Phase Tracker</h1>
+  
+  <!-- Today -->
+  <div id="today"></div>
+  
+  <!-- Button -->
+  <button onclick="showNext7Days()">Show Next 7 Days</button>
+  
+  <!-- Next 7 days -->
+  <div id="next7"></div>
+
+  <script>
+    // Function to calculate moon phase
+    function getMoonPhase(date) {
+      const lp = 2551443; // lunar period in seconds
+      const new_moon = new Date(1970, 0, 7, 20, 35, 0);
+      const phase = ((date.getTime() - new_moon.getTime()) / 1000) % lp;
+      const phaseIndex = Math.floor((phase / lp) * 8);
+      const phases = ["🌑 New Moon", "🌒 Waxing Crescent", "🌓 First Quarter", 
+                      "🌔 Waxing Gibbous", "🌕 Full Moon", "🌖 Waning Gibbous", 
+                      "🌗 Last Quarter", "🌘 Waning Crescent"];
+      return phases[phaseIndex];
+    }
+
+    // Show today's moon
+    function showToday() {
+      const today = new Date();
+      document.getElementById("today").innerHTML =
+        `<h2>Today: ${today.toDateString()}</h2>
+         <p class="moon-phase">${getMoonPhase(today)}</p>`;
+    }
+
+    // Show next 7 days
+    function showNext7Days() {
+      let output = "<h2>Next 7 Days</h2>";
+      for (let i = 1; i <= 7; i++) {
+        let nextDay = new Date();
+        nextDay.setDate(nextDay.getDate() + i);
+        output += `<p class="moon-phase">${nextDay.toDateString()} → ${getMoonPhase(nextDay)}</p>`;
+      }
+      document.getElementById("next7").innerHTML = output;
+    }
+
+    // Run immediately for today
+    showToday();
+  </script>
+</body>
+</html>
